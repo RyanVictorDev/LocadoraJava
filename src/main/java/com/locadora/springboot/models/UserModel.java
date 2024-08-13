@@ -9,20 +9,18 @@ import java.util.UUID;
 public class UserModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public enum Role { ADMIN, VISITOR }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID idUser;
+    private int idUser;
     private String name;
     private String email;
-    private Role role;
+    private String role;
 
-    public UUID getIdUser() {
+    public int getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(UUID idUser) {
+    public void setIdUser(int idUser) {
         this.idUser = idUser;
     }
 
@@ -42,11 +40,11 @@ public class UserModel implements Serializable {
         this.email = email;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 }
