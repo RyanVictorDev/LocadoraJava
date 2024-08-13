@@ -11,17 +11,17 @@ public class UserModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int idUser;
+    private int id;
     private String name;
     private String email;
     private String role;
 
-    public int getIdUser() {
-        return idUser;
+    public int getId() {
+        return id;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
