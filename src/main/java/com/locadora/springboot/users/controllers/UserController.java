@@ -1,17 +1,15 @@
-package com.locadora.springboot.controllers;
+package com.locadora.springboot.users.controllers;
 
-import com.locadora.springboot.models.UserModel;
-import com.locadora.springboot.dtos.UserRecordDto;
-import com.locadora.springboot.repositories.UserRepository;
+import com.locadora.springboot.users.models.UserModel;
+import com.locadora.springboot.users.DTOs.CreateUserRequestDTO;
+import com.locadora.springboot.users.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.attribute.UserPrincipal;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +20,9 @@ public class UserController {
     UserRepository userRepository;
 
     @PostMapping("/users")
-    public ResponseEntity<UserModel> saveUser(@RequestBody @Valid UserRecordDto userRecordDto) {
+    public ResponseEntity<UserModel> saveUser(@RequestBody @Valid CreateUserRequestDTO createUserRequestDTO) {
         var userModel = new UserModel();
-        BeanUtils.copyProperties(userRecordDto, userModel);
+        BeanUtils.copyProperties(createUserRequestDTO, userModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(userModel));
     }
 
@@ -43,13 +41,13 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<Object> updateUser(@PathVariable(value="id") int id, @RequestBody @Valid UserRecordDto userRecordDto){
+    public ResponseEntity<Object> updateUser(@PathVariable(value="id") int id, @RequestBody @Valid CreateUserRequestDTO createUserRequestDTO){
         Optional<UserModel> userA = userRepository.findById(id);
         if(userA.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
         var userModel = userA.get();
-        BeanUtils.copyProperties(userRecordDto, userModel);
+        BeanUtils.copyProperties(createUserRequestDTO, userModel);
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(userModel));
     }
 
