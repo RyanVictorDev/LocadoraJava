@@ -52,4 +52,14 @@ public class UserController {
         BeanUtils.copyProperties(userRecordDto, userModel);
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(userModel));
     }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Object> deleteUser(@PathVariable(value="id") int id){
+        Optional<UserModel> userA = userRepository.findById(id);
+        if(userA.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        userRepository.delete(userA.get());
+        return ResponseEntity.status(HttpStatus.OK).body("User deleted successfylly");
+    }
 }
