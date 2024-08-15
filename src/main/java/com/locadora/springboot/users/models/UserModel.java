@@ -1,6 +1,5 @@
 package com.locadora.springboot.users.models;
 
-import com.locadora.springboot.models.UserRoleEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,22 +22,53 @@ public class UserModel implements UserDetails {
     private int id;
     private String name;
     private String email;
-    private String senha;
+    private String password;
     private UserRoleEnum role;
+
+    public UserModel() {}
+
+    public UserModel(String name, String email, String password, UserRoleEnum role){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == UserRoleEnum.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority(""));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if(this.role == UserRoleEnum.ADMIN)
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        else
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
     public String getPassword() {
-        return "";
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return name;
+        return this.name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

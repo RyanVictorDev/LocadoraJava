@@ -19,13 +19,6 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/users")
-    public ResponseEntity<UserModel> saveUser(@RequestBody @Valid CreateUserRequestDTO createUserRequestDTO) {
-        var userModel = new UserModel();
-        BeanUtils.copyProperties(createUserRequestDTO, userModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(userModel));
-    }
-
     @GetMapping("/users")
     public ResponseEntity<List<UserModel>> getAllUsers(){
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAll());
@@ -58,6 +51,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
         userRepository.delete(userA.get());
-        return ResponseEntity.status(HttpStatus.OK).body("User deleted successfylly");
+        return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
     }
 }

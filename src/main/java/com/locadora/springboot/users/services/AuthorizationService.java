@@ -1,4 +1,4 @@
-package com.locadora.springboot.services;
+package com.locadora.springboot.users.services;
 
 import com.locadora.springboot.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ public class AuthorizationService implements UserDetailsService {
 
     @Autowired
     UserRepository repository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByName(username);

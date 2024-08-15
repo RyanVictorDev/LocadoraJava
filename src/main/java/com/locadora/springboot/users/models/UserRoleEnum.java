@@ -1,4 +1,4 @@
-package com.locadora.springboot.models;
+package com.locadora.springboot.users.models;
 
 public enum UserRoleEnum {
     ADMIN, USER
