@@ -19,7 +19,6 @@ import java.util.List;
 @Entity
 @Table(name = "tb_users")
 public class UserModel implements UserDetails {
-    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

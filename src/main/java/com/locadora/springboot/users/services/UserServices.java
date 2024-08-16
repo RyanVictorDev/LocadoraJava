@@ -24,18 +24,6 @@ public class UserServices {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public List<UserModel> findAll() {
-        List<UserModel> users = userRepository.findAll();
-        if (users.isEmpty()) {
-            throw new ModelNotFoundException();
-        }
-        return users;
-    }
-
-    public Optional<UserModel> findById(int id) {
-        return userRepository.findById(id);
-    }
-
     public ResponseEntity<Void> create(@Valid CreateUserRequestDTO data) {
         if (userRepository.findByName(data.name()) != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -48,22 +36,34 @@ public class UserServices {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public ResponseEntity<Object> put(int id, @Valid CreateUserRequestDTO createUserRequestDTO){
-        Optional<UserModel> userA = userRepository.findById(id);
-        if(userA.isEmpty()){
+    public List<UserModel> findAll() {
+        List<UserModel> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            throw new ModelNotFoundException();
+        }
+        return users;
+    }
+
+    public Optional<UserModel> findById(int id) {
+        return userRepository.findById(id);
+    }
+
+    public ResponseEntity<Object> update(int id, @Valid CreateUserRequestDTO createUserRequestDTO){
+        Optional<UserModel> response = userRepository.findById(id);
+        if(response.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
-        var userModel = userA.get();
+        var userModel = response.get();
         BeanUtils.copyProperties(createUserRequestDTO, userModel);
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(userModel));
     }
 
     public ResponseEntity<Object> delete(int id){
-        Optional<UserModel> userA = userRepository.findById(id);
-        if(userA.isEmpty()){
+        Optional<UserModel> response = userRepository.findById(id);
+        if(response.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
-        userRepository.delete(userA.get());
+        userRepository.delete(response.get());
         return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
     }
 }
