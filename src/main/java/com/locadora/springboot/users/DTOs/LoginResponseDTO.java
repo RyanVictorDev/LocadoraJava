@@ -1,5 +1,5 @@
 package com.locadora.springboot.users.DTOs;
 
-public record LoginREsponseDTO(String token) {
+public record LoginResponseDTO(String token) {
 
 }

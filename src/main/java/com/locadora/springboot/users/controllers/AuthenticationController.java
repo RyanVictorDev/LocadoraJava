@@ -1,9 +1,8 @@
 package com.locadora.springboot.users.controllers;
 
 import com.locadora.springboot.users.configurations.TokenService;
-import com.locadora.springboot.users.DTOs.AuthenticationDto;
-import com.locadora.springboot.users.DTOs.RegisterDto;
-import com.locadora.springboot.users.DTOs.LoginREsponseDTO;
+import com.locadora.springboot.users.DTOs.AuthenticationDTO;
+import com.locadora.springboot.users.DTOs.LoginResponseDTO;
 import com.locadora.springboot.users.models.UserModel;
 import com.locadora.springboot.users.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,23 +28,12 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDto data){
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.name(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((UserModel) auth.getPrincipal());
 
-        return ResponseEntity.ok(new LoginREsponseDTO(token));
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDto data){
-        if (this.repository.findByName(data.name()) != null) return ResponseEntity.badRequest().build();
-
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        UserModel newUser = new UserModel(data.name(), data.email(), encryptedPassword, data.role());
-
-        this.repository.save(newUser);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 }
