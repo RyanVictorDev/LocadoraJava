@@ -44,25 +44,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userMapper.toUserResponse(userServices.findById(id).get()));
     }
 
-//
-//    @PutMapping("/users/{id}")
-//    public ResponseEntity<Object> updateUser(@PathVariable(value="id") int id, @RequestBody @Valid CreateUserRequestDTO createUserRequestDTO){
-//        Optional<UserModel> userA = userRepository.findById(id);
-//        if(userA.isEmpty()){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-//        }
-//        var userModel = userA.get();
-//        BeanUtils.copyProperties(createUserRequestDTO, userModel);
-//        return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(userModel));
-//    }
-//
-//    @DeleteMapping("/users/{id}")
-//    public ResponseEntity<Object> deleteUser(@PathVariable(value="id") int id){
-//        Optional<UserModel> userA = userRepository.findById(id);
-//        if(userA.isEmpty()){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-//        }
-//        userRepository.delete(userA.get());
-//        return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
-//    }
+    @PutMapping("/users/{id}")
+    public ResponseEntity<Object> updateUser(@PathVariable(value="id") int id, @RequestBody @Valid CreateUserRequestDTO createUserRequestDTO){
+        return userServices.put(id, createUserRequestDTO);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Object> deleteUser(@PathVariable(value="id") int id){
+        return userServices.delete(id);
+    }
 }
