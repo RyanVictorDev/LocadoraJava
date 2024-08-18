@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.ObjectName;
 import java.util.List;
 
 @RestController
@@ -37,5 +38,15 @@ public class PublisherController {
     @GetMapping("/publisher/{id}")
     public ResponseEntity<PublisherResponseDTO> getById(@PathVariable(value = "id") int id){
         return ResponseEntity.status(HttpStatus.OK).body(publisherMapper.toPublisherResponse(publisherServices.findById(id).get()));
+    }
+
+    @PutMapping("/publisher/{id}")
+    public ResponseEntity<Object> update(@PathVariable(value = "id") int id, @RequestBody @Valid CreatePublisherRequestDTO createPublisherRequestDTO){
+        return publisherServices.update(id, createPublisherRequestDTO);
+    }
+
+    @DeleteMapping("/publisher/{id}")
+    public ResponseEntity<Object> delete(@PathVariable(value = "id") int id){
+        return publisherServices.delete(id);
     }
 }
