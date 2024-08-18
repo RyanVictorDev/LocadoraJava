@@ -7,13 +7,11 @@ import com.locadora.springboot.publishers.services.PublisherServices;
 import com.locadora.springboot.users.DTOs.CreateUserRequestDTO;
 import com.locadora.springboot.users.repositories.UserRepository;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,9 +24,6 @@ public class PublisherController {
     @Autowired
     PublisherServices publisherServices;
 
-    @Autowired
-    UserRepository userRepository;
-
     @PostMapping("/publisher")
     public ResponseEntity<Void> create(@RequestBody @Valid CreatePublisherRequestDTO data) {
         return publisherServices.create(data);
@@ -37,5 +32,10 @@ public class PublisherController {
     @GetMapping("/publisher")
     public ResponseEntity<List<PublisherResponseDTO>> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(publisherMapper.toPublisherResponseList(publisherServices.findAll()));
+    }
+
+    @GetMapping("/publisher/{id}")
+    public ResponseEntity<PublisherResponseDTO> getById(@PathVariable(value = "id") int id){
+        return ResponseEntity.status(HttpStatus.OK).body(publisherMapper.toPublisherResponse(publisherServices.findById(id).get()));
     }
 }

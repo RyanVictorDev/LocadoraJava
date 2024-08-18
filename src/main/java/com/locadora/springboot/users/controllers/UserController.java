@@ -22,9 +22,6 @@ public class UserController {
     @Autowired
     UserServices userServices;
 
-    @Autowired
-    UserRepository userRepository;
-
     @PostMapping("/user")
     public ResponseEntity<Void> create(@RequestBody @Valid CreateUserRequestDTO data) {
         return userServices.create(data);

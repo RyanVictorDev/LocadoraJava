@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PublisherServices {
@@ -32,7 +33,10 @@ public class PublisherServices {
     public List<PublisherModel> findAll() {
         List<PublisherModel> publishers = publisherRepository.findAll();
         if (publishers.isEmpty()) throw new ModelNotFoundException();
-
         return publishers;
+    }
+
+    public Optional<PublisherModel> findById(int id){
+        return publisherRepository.findById(id);
     }
 }
