@@ -1,5 +1,6 @@
 package com.locadora.springboot.publishers.services;
 
+import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.publishers.DTOs.CreatePublisherRequestDTO;
 import com.locadora.springboot.publishers.models.PublisherModel;
 import com.locadora.springboot.publishers.repositories.PublisherRepository;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PublisherServices {
@@ -24,5 +27,12 @@ public class PublisherServices {
         publisherRepository.save(newPublisher);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    public List<PublisherModel> findAll() {
+        List<PublisherModel> publishers = publisherRepository.findAll();
+        if (publishers.isEmpty()) throw new ModelNotFoundException();
+
+        return publishers;
     }
 }

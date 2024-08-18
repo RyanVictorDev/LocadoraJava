@@ -38,9 +38,7 @@ public class UserServices {
 
     public List<UserModel> findAll() {
         List<UserModel> users = userRepository.findAll();
-        if (users.isEmpty()) {
-            throw new ModelNotFoundException();
-        }
+        if (users.isEmpty()) throw new ModelNotFoundException();
         return users;
     }
 
