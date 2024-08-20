@@ -8,7 +8,8 @@ import java.util.List;
 
 @Component
 public class RenterMapper {
-    public List<RenterResponseDTO> toRenterResponseList (List<RenterModel> renterList){
+
+    public List<RenterResponseDTO> toRenterResponseList(List<RenterModel> renterList){
         return renterList.stream().map(this::toRenterResponse).toList();
     }
 

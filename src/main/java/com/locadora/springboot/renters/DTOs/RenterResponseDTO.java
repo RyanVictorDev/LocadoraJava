@@ -7,7 +7,7 @@ public record RenterResponseDTO(
         int id,
         String name,
         String email,
-        int telephone,
+        String telephone,
         String address,
-        int cpf) {
+        String cpf) {
 }

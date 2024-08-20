@@ -28,6 +28,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/user").permitAll()
                         .requestMatchers(HttpMethod.POST, "/publisher").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/renter").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
                         .anyRequest().authenticated()

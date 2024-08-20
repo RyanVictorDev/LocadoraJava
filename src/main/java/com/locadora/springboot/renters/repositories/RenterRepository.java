@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RenterRepository extends JpaRepository<RenterModel, Integer> {
-    RenterModel findByName(String name);
+    UserDetails findByName(String name);
 }

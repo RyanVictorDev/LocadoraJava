@@ -16,11 +16,11 @@ public class RenterModel {
     private int id;
     private String name;
     private String email;
-    private int telephone;
+    private String telephone;
     private String address;
-    private int cpf;
+    private String cpf;
 
-    public RenterModel(String name, String email, int telephone, String address, int cpf){
+    public RenterModel(String name, String email, String telephone, String address, String cpf){
         this.name = name;
         this.email = email;
         this.telephone = telephone;
