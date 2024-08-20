@@ -2,6 +2,7 @@ package com.locadora.springboot.renters.services;
 
 import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.renters.DTOs.CreateRenterRequestDTO;
+import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
 import com.locadora.springboot.renters.models.RenterModel;
 import com.locadora.springboot.renters.repositories.RenterRepository;
 import jakarta.validation.Valid;
@@ -41,13 +42,13 @@ public class RenterServices {
         return renterRepository.findById(id);
     }
 
-    public ResponseEntity<Object> update(int id, @Valid CreateRenterRequestDTO createRenterRequestDTO){
+    public ResponseEntity<Object> update(int id, @Valid UpdateRenterRequestDTO updateRenterRequestDTO){
         Optional<RenterModel> response = renterRepository.findById(id);
         if (response.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Renter not found");
 
         RenterModel renterModel = response.get();
-        BeanUtils.copyProperties(createRenterRequestDTO, renterModel);
+        BeanUtils.copyProperties(updateRenterRequestDTO, renterModel);
 
         return ResponseEntity.status(HttpStatus.OK).body(renterRepository.save(renterModel));
     }

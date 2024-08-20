@@ -5,6 +5,7 @@ import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.publishers.DTOs.CreatePublisherRequestDTO;
 import com.locadora.springboot.publishers.models.PublisherModel;
 import com.locadora.springboot.publishers.repositories.PublisherRepository;
+import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
 import com.locadora.springboot.users.models.UserModel;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -40,12 +41,12 @@ public class PublisherServices {
         return publisherRepository.findById(id);
     }
 
-    public ResponseEntity<Object> update(int id, @Valid CreatePublisherRequestDTO createPublisherRequestDTO){
+    public ResponseEntity<Object> update(int id, @Valid UpdateRenterRequestDTO updateRenterRequestDTO){
         Optional<PublisherModel> response = publisherRepository.findById(id);
         if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Publisher not found");
 
         var publisherModel = response.get();
-        BeanUtils.copyProperties(createPublisherRequestDTO, publisherModel);
+        BeanUtils.copyProperties(updateRenterRequestDTO, publisherModel);
 
         return ResponseEntity.status(HttpStatus.OK).body(publisherRepository.save(publisherModel));
     }

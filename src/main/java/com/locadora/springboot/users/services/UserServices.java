@@ -2,6 +2,7 @@ package com.locadora.springboot.users.services;
 
 import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.users.DTOs.CreateUserRequestDTO;
+import com.locadora.springboot.users.DTOs.UpdateUserRequestDTO;
 import com.locadora.springboot.users.models.UserModel;
 import com.locadora.springboot.users.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -46,13 +47,13 @@ public class UserServices {
         return userRepository.findById(id);
     }
 
-    public ResponseEntity<Object> update(int id, @Valid CreateUserRequestDTO createUserRequestDTO){
+    public ResponseEntity<Object> update(int id, @Valid UpdateUserRequestDTO updateUserRequestDTO){
         Optional<UserModel> response = userRepository.findById(id);
         if(response.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
         var userModel = response.get();
-        BeanUtils.copyProperties(createUserRequestDTO, userModel);
+        BeanUtils.copyProperties(updateUserRequestDTO, userModel);
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(userModel));
     }
 

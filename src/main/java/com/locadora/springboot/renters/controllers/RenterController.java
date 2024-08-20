@@ -2,6 +2,7 @@ package com.locadora.springboot.renters.controllers;
 
 import com.locadora.springboot.renters.DTOs.CreateRenterRequestDTO;
 import com.locadora.springboot.renters.DTOs.RenterResponseDTO;
+import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
 import com.locadora.springboot.renters.mappers.RenterMapper;
 import com.locadora.springboot.renters.services.RenterServices;
 import jakarta.validation.Valid;
@@ -36,8 +37,8 @@ public class RenterController {
     }
 
     @PutMapping("/renter/{id}")
-    public ResponseEntity<Object> update(@PathVariable(value = "id") int id, @RequestBody @Valid CreateRenterRequestDTO createRenterRequestDTO){
-        return renterServices.update(id, createRenterRequestDTO);
+    public ResponseEntity<Object> update(@PathVariable(value = "id") int id, @RequestBody @Valid UpdateRenterRequestDTO updateRenterRequestDTO){
+        return renterServices.update(id, updateRenterRequestDTO);
     }
 
     @DeleteMapping("/renter/{id}")
