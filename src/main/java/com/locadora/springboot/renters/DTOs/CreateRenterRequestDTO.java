@@ -1,11 +1,12 @@
-package com.locadora.springboot.publishers.DTOs;
+package com.locadora.springboot.renters.DTOs;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreatePublisherRequestDTO(
+public record CreateRenterRequestDTO(
         @NotBlank String name,
         @NotBlank String email,
         @NotNull int telephone,
-        String site) {
+        @NotNull String address,
+        int cpf) {
 }

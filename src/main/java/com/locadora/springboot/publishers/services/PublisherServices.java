@@ -22,9 +22,7 @@ public class PublisherServices {
     PublisherRepository publisherRepository;
 
     public ResponseEntity<Void> create(@Valid CreatePublisherRequestDTO data) {
-        if (publisherRepository.findByName(data.name()) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        if (publisherRepository.findByName(data.name()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         PublisherModel newPublisher = new PublisherModel(data.name(), data.email(), data.telephone(), data.site());
         publisherRepository.save(newPublisher);

@@ -1,8 +1,6 @@
-package com.locadora.springboot.publishers.models;
+package com.locadora.springboot.renters.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.*;
 
 @AllArgsConstructor
@@ -10,8 +8,8 @@ import lombok.*;
 @Setter
 @Getter
 @Entity
-@Table(name = "tb_publishers")
-public class PublisherModel {
+@Table(name = "tb_renters")
+public class RenterModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,12 +17,14 @@ public class PublisherModel {
     private String name;
     private String email;
     private int telephone;
-    private String site;
+    private String address;
+    private int cpf;
 
-    public PublisherModel(String name, String email, int telephone, String site){
+    public RenterModel(String name, String email, int telephone, String address, int cpf){
         this.name = name;
         this.email = email;
         this.telephone = telephone;
-        this.site = site;
+        this.address = address;
+        this.cpf = cpf;
     }
 }
