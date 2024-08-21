@@ -1,12 +1,10 @@
 package com.locadora.springboot.publishers.services;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.publishers.DTOs.CreatePublisherRequestDTO;
 import com.locadora.springboot.publishers.models.PublisherModel;
 import com.locadora.springboot.publishers.repositories.PublisherRepository;
 import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
-import com.locadora.springboot.users.models.UserModel;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

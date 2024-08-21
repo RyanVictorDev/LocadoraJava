@@ -5,16 +5,12 @@ import com.locadora.springboot.publishers.DTOs.PublisherResponseDTO;
 import com.locadora.springboot.publishers.mappers.PublisherMapper;
 import com.locadora.springboot.publishers.services.PublisherServices;
 import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
-import com.locadora.springboot.users.DTOs.CreateUserRequestDTO;
-import com.locadora.springboot.users.repositories.UserRepository;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.ObjectName;
 import java.util.List;
 
 @RestController

@@ -29,6 +29,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/user").permitAll()
                         .requestMatchers(HttpMethod.POST, "/publisher").permitAll()
                         .requestMatchers(HttpMethod.POST, "/renter").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/book").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
                         .anyRequest().authenticated()
