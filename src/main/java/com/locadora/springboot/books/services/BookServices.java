@@ -64,4 +64,12 @@ public class BookServices {
         bookRepository.save(bookModel);
         return ResponseEntity.status(HttpStatus.OK).body(bookModel);
     }
+
+    public ResponseEntity<Object> delete(int id){
+        Optional<BookModel> response = bookRepository.findById(id);
+        if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+
+        bookRepository.delete(response.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Book deleted successfully");
+    }
 }
