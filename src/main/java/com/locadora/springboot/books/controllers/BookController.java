@@ -5,7 +5,6 @@ import com.locadora.springboot.books.DTOs.CreateBookRequestDTO;
 import com.locadora.springboot.books.DTOs.UpdateBookRecordDTO;
 import com.locadora.springboot.books.mappers.BookMapper;
 import com.locadora.springboot.books.services.BookServices;
-import com.locadora.springboot.users.DTOs.UpdateUserRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
