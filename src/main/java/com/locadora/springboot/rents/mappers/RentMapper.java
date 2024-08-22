@@ -9,8 +9,8 @@ import java.util.List;
 @Component
 public class RentMapper {
 
-    public List<RentResponseDTO> toRentResponseList(List<RentModel> bookList){
-        return bookList.stream().map(this::toRentResponse).toList();
+    public List<RentResponseDTO> toRentResponseList(List<RentModel> rentList){
+        return rentList.stream().map(this::toRentResponse).toList();
     }
 
     public RentResponseDTO toRentResponse(RentModel model){
@@ -20,7 +20,9 @@ public class RentMapper {
                 .book(model.getBook())
                 .renter(model.getRenter())
                 .deadLine(model.getDeadLine())
-                .devolutionDate(model.getDevolutionDate())
+                .devolutionDate(model.getRentDate())
+                .rentDate(model.getRentDate())
+                .status(model.getStatus())
                 .build();
     }
 }

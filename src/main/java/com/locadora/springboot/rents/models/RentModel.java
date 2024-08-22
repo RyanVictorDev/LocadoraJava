@@ -27,14 +27,25 @@ public class RentModel {
     @JoinColumn(name = "book_id")
     private BookModel book;
 
+    private LocalDate devolutionDate;
+
     private LocalDate deadLine;
 
-    private LocalDate devolutionDate;
+    private LocalDate rentDate;
+
+    @Enumerated(EnumType.STRING)
+    private RentStatusEnum status;
 
     public RentModel(RenterModel renter, BookModel book, LocalDate deadLine){
         this.renter = renter;
         this.book = book;
         this.deadLine = deadLine;
         this.devolutionDate = LocalDate.now();
+        this.rentDate = LocalDate.now();
+        this.status = determineStatus(deadLine, rentDate);
+    }
+
+    private RentStatusEnum determineStatus(LocalDate deadLine, LocalDate devolutionDate) {
+        return devolutionDate.isAfter(deadLine) ? RentStatusEnum.DELIVERED_WITH_DELAY : RentStatusEnum.IN_TIME;
     }
 }
