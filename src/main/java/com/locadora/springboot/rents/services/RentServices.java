@@ -6,7 +6,9 @@ import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.renters.models.RenterModel;
 import com.locadora.springboot.renters.repositories.RenterRepository;
 import com.locadora.springboot.rents.DTOs.CreateRentRequestDTO;
+import com.locadora.springboot.rents.DTOs.UpdateRentRecordDTO;
 import com.locadora.springboot.rents.models.RentModel;
+import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,5 +53,27 @@ public class RentServices {
 
     public Optional<RentModel> findById(int id){
         return rentRepository.findById(id);
+    }
+
+    public ResponseEntity<Object> update(int id) {
+        Optional<RentModel> optionalRent = rentRepository.findById(id);
+        if (optionalRent.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rent not found");
+        }
+
+        RentModel rent = optionalRent.get();
+
+        rent.setDevolutionDate(LocalDate.now());
+
+        if (rent.getDevolutionDate() != null) {
+            if (rent.getDevolutionDate().isAfter(rent.getDeadLine())) {
+                rent.setStatus(RentStatusEnum.DELIVERED_WITH_DELAY);
+            } else {
+                rent.setStatus(RentStatusEnum.DELIVERED);
+            }
+        }
+
+        rentRepository.save(rent);
+        return ResponseEntity.status(HttpStatus.OK).body(rent);
     }
 }

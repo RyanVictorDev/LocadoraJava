@@ -9,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -38,5 +36,11 @@ public class RentController {
     @GetMapping("/rent/{id}")
     public ResponseEntity<RentResponseDTO> getById(@PathVariable(value = "id") int id){
         return ResponseEntity.status(HttpStatus.OK).body(rentMapper.toRentResponse(rentServices.findById(id).get()));
+    }
+
+    @PutMapping("/rent/{id}")
+    public ResponseEntity<Object> update(
+            @PathVariable int id) {
+        return rentServices.update(id);
     }
 }

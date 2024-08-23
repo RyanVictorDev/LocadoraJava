@@ -20,7 +20,7 @@ public class RentMapper {
                 .book(model.getBook())
                 .renter(model.getRenter())
                 .deadLine(model.getDeadLine())
-                .devolutionDate(model.getRentDate())
+                .devolutionDate(model.getDevolutionDate())
                 .rentDate(model.getRentDate())
                 .status(model.getStatus())
                 .build();
