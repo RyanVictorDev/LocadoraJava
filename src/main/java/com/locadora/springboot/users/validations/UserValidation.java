@@ -4,16 +4,14 @@ import com.locadora.springboot.exceptions.CustomValidationException;
 import com.locadora.springboot.users.DTOs.CreateUserRequestDTO;
 import com.locadora.springboot.users.DTOs.UpdateUserRequestDTO;
 import com.locadora.springboot.users.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+@AllArgsConstructor
 @Component
 public class UserValidation {
 
     private final UserRepository userRepository;
-
-    public UserValidation(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public void validateEmail(CreateUserRequestDTO data) {
         if (userRepository.findByEmail(data.email()) != null) {

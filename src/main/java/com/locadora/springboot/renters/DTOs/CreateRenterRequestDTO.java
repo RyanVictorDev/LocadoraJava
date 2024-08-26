@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;
 
 public record CreateRenterRequestDTO(
-        @NotBlank(message = "") String name,
-        @NotBlank @Email String email,
-        @NotBlank String telephone,
-        @NotBlank String address,
+        @NotBlank(message = "The name cannot be empty") String name,
+        @NotBlank(message = "The email cannot be empty") @Email(message = "Invalid email.") String email,
+        @NotBlank(message = "The telephone cannot be empty") String telephone,
+        @NotBlank(message = "The address cannot be empty") String address,
         @CPF String cpf) {
 }

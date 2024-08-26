@@ -10,6 +10,7 @@ import com.locadora.springboot.rents.DTOs.UpdateRentRecordDTO;
 import com.locadora.springboot.rents.models.RentModel;
 import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;
+import com.locadora.springboot.rents.validation.RentValidation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,12 +33,21 @@ public class RentServices {
     @Autowired
     BookRepository bookRepository;
 
+    @Autowired
+    RentValidation rentValidation;
+
     public ResponseEntity<Void> create(@Valid CreateRentRequestDTO data){
+        rentValidation.validateRentId(data);
+
         RenterModel renter = renterRepository.findById(data.renterId())
                 .orElseThrow(() -> new IllegalArgumentException("Renter not found"));
 
+        rentValidation.validateBookId(data);
+
         BookModel book = bookRepository.findById(data.bookId())
                 .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+
+        rentValidation.validateDeadLine(data);
 
         RentModel newRent = new RentModel(renter, book, data.deadLine());
         rentRepository.save(newRent);
