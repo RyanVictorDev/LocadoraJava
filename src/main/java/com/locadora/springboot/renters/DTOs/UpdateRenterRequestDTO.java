@@ -1,12 +1,13 @@
 package com.locadora.springboot.renters.DTOs;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.br.CPF;
 
 public record UpdateRenterRequestDTO(
         @NotBlank String name,
-        @NotBlank String email,
+        @NotBlank @Email String email,
         @NotBlank String telephone,
         @NotBlank String address,
-        @Pattern(regexp = "\\d{11}", message = "CPF must be 11 digits") String cpf) {
+        @CPF String cpf) {
 }

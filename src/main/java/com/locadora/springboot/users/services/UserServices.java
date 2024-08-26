@@ -5,6 +5,7 @@ import com.locadora.springboot.users.DTOs.CreateUserRequestDTO;
 import com.locadora.springboot.users.DTOs.UpdateUserRequestDTO;
 import com.locadora.springboot.users.models.UserModel;
 import com.locadora.springboot.users.repositories.UserRepository;
+import com.locadora.springboot.users.validations.UserValidation;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,12 @@ public class UserServices {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserValidation userValidation;
+
     public ResponseEntity<Void> create(@Valid CreateUserRequestDTO data) {
-        if (userRepository.findByName(data.name()) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+
+        userValidation.validateEmail(data);
 
         String encryptedPassword = passwordEncoder.encode(data.password());
         UserModel newUser = new UserModel(data.name(), data.email(), encryptedPassword, data.role());
@@ -53,6 +56,8 @@ public class UserServices {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
         var userModel = response.get();
+
+        userValidation.validateUpdateEmail(updateUserRequestDTO);
         BeanUtils.copyProperties(updateUserRequestDTO, userModel);
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(userModel));
     }
