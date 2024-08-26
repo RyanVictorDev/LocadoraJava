@@ -6,7 +6,6 @@ import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.renters.models.RenterModel;
 import com.locadora.springboot.renters.repositories.RenterRepository;
 import com.locadora.springboot.rents.DTOs.CreateRentRequestDTO;
-import com.locadora.springboot.rents.DTOs.UpdateRentRecordDTO;
 import com.locadora.springboot.rents.models.RentModel;
 import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;

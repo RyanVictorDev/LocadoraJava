@@ -4,7 +4,6 @@ import com.locadora.springboot.books.repositories.BookRepository;
 import com.locadora.springboot.exceptions.CustomValidationException;
 import com.locadora.springboot.renters.repositories.RenterRepository;
 import com.locadora.springboot.rents.DTOs.CreateRentRequestDTO;
-import com.locadora.springboot.rents.repositories.RentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,9 +13,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Component
 public class RentValidation {
-
-    @Autowired
-    private final RentRepository rentRepository;
 
     @Autowired
     RenterRepository renterRepository;

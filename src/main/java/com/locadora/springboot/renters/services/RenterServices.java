@@ -5,6 +5,7 @@ import com.locadora.springboot.renters.DTOs.CreateRenterRequestDTO;
 import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
 import com.locadora.springboot.renters.models.RenterModel;
 import com.locadora.springboot.renters.repositories.RenterRepository;
+import com.locadora.springboot.renters.validations.RenterValidation;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,11 @@ public class RenterServices {
     @Autowired
     private RenterRepository renterRepository;
 
+    @Autowired
+    private RenterValidation renterValidation;
+
     public ResponseEntity<Void> create(@Valid CreateRenterRequestDTO data){
-        if (renterRepository.findByName(data.name()) != null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        renterValidation.validateEmail(data);
 
         RenterModel newRenter = new RenterModel(data.name(), data.email(), data.telephone(), data.address(), data.cpf());
         renterRepository.save(newRenter);
@@ -44,8 +47,9 @@ public class RenterServices {
 
     public ResponseEntity<Object> update(int id, @Valid UpdateRenterRequestDTO updateRenterRequestDTO){
         Optional<RenterModel> response = renterRepository.findById(id);
-        if (response.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Renter not found");
+        if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Renter not found");
+
+        renterValidation.validateUpdateEmail(updateRenterRequestDTO);
 
         RenterModel renterModel = response.get();
         BeanUtils.copyProperties(updateRenterRequestDTO, renterModel);
