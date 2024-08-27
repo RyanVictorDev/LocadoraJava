@@ -1,5 +1,6 @@
 package com.locadora.springboot.rents.validation;
 
+import com.locadora.springboot.books.models.BookModel;
 import com.locadora.springboot.books.repositories.BookRepository;
 import com.locadora.springboot.exceptions.CustomValidationException;
 import com.locadora.springboot.renters.repositories.RenterRepository;
@@ -33,10 +34,16 @@ public class RentValidation {
     }
 
     public void validateDeadLine(CreateRentRequestDTO data){
-        if (data.deadLine().isBefore(data.deadLine().plusDays(30))){
+        if (data.deadLine().isAfter(data.deadLine().plusDays(30))){
             throw new CustomValidationException("Deadline cannot be more 30 days.");
-        } else if (data.deadLine().isAfter(LocalDate.now())) {
+        } else if (data.deadLine().isBefore(LocalDate.now())) {
             throw new CustomValidationException("The deadline cannot be in the past.");
+        }
+    }
+
+    public void validateBookTotalQuantity(BookModel data){
+        if (data.getTotalQuantity() <= 0){
+            throw new CustomValidationException("There are no books available");
         }
     }
 }

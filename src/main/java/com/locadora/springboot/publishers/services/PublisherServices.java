@@ -2,8 +2,10 @@ package com.locadora.springboot.publishers.services;
 
 import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.publishers.DTOs.CreatePublisherRequestDTO;
+import com.locadora.springboot.publishers.DTOs.UpdatePublisherRecordDTO;
 import com.locadora.springboot.publishers.models.PublisherModel;
 import com.locadora.springboot.publishers.repositories.PublisherRepository;
+import com.locadora.springboot.publishers.validations.PublisherValidation;
 import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -20,8 +22,15 @@ public class PublisherServices {
     @Autowired
     PublisherRepository publisherRepository;
 
+    @Autowired
+    PublisherValidation publisherValidation;
+
     public ResponseEntity<Void> create(@Valid CreatePublisherRequestDTO data) {
-        if (publisherRepository.findByName(data.name()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        publisherValidation.validName(data);
+        publisherValidation.validEmail(data);
+        publisherValidation.validTelephone(data);
+        publisherValidation.validSite(data);
 
         PublisherModel newPublisher = new PublisherModel(data.name(), data.email(), data.telephone(), data.site());
         publisherRepository.save(newPublisher);
@@ -39,12 +48,17 @@ public class PublisherServices {
         return publisherRepository.findById(id);
     }
 
-    public ResponseEntity<Object> update(int id, @Valid UpdateRenterRequestDTO updateRenterRequestDTO){
+    public ResponseEntity<Object> update(int id, @Valid UpdatePublisherRecordDTO updatePublisherRecordDTO){
         Optional<PublisherModel> response = publisherRepository.findById(id);
         if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Publisher not found");
 
+        publisherValidation.validNameUpdate(updatePublisherRecordDTO);
+        publisherValidation.validEmailUpdate(updatePublisherRecordDTO);
+        publisherValidation.validTelephoneUpdate(updatePublisherRecordDTO);
+        publisherValidation.validSiteUpdate(updatePublisherRecordDTO);
+
         var publisherModel = response.get();
-        BeanUtils.copyProperties(updateRenterRequestDTO, publisherModel);
+        BeanUtils.copyProperties(updatePublisherRecordDTO, publisherModel);
 
         return ResponseEntity.status(HttpStatus.OK).body(publisherRepository.save(publisherModel));
     }

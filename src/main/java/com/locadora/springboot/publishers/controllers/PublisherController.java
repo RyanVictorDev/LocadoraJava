@@ -2,6 +2,7 @@ package com.locadora.springboot.publishers.controllers;
 
 import com.locadora.springboot.publishers.DTOs.CreatePublisherRequestDTO;
 import com.locadora.springboot.publishers.DTOs.PublisherResponseDTO;
+import com.locadora.springboot.publishers.DTOs.UpdatePublisherRecordDTO;
 import com.locadora.springboot.publishers.mappers.PublisherMapper;
 import com.locadora.springboot.publishers.services.PublisherServices;
 import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
@@ -38,8 +39,8 @@ public class PublisherController {
     }
 
     @PutMapping("/publisher/{id}")
-    public ResponseEntity<Object> update(@PathVariable(value = "id") int id, @RequestBody @Valid UpdateRenterRequestDTO updateRenterRequestDTO){
-        return publisherServices.update(id, updateRenterRequestDTO);
+    public ResponseEntity<Object> update(@PathVariable(value = "id") int id, @RequestBody @Valid UpdatePublisherRecordDTO updatePublisherRecordDTO){
+        return publisherServices.update(id, updatePublisherRecordDTO);
     }
 
     @DeleteMapping("/publisher/{id}")

@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record CreateBookRequestDTO(
-        @NotBlank String name,
-        @NotBlank String author,
-        @NotNull @JsonFormat(pattern = "yyyy-MM-dd") LocalDate launchDate,
-        @NotNull int totalQuantity,
-        @NotNull int publisherId) {
+        @NotBlank(message = "The name cannot be empty") String name,
+        @NotBlank(message = "The author cannot be empty") String author,
+        @NotNull(message = "The launch date cannot be empty") @JsonFormat(pattern = "yyyy-MM-dd") LocalDate launchDate,
+        @NotNull(message = "The total quantity cannot be empty") int totalQuantity,
+        @NotNull(message = "The publisher id cannot be empty") int publisherId) {
 }

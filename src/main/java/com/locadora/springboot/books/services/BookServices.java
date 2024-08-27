@@ -4,6 +4,7 @@ import com.locadora.springboot.books.DTOs.CreateBookRequestDTO;
 import com.locadora.springboot.books.DTOs.UpdateBookRecordDTO;
 import com.locadora.springboot.books.models.BookModel;
 import com.locadora.springboot.books.repositories.BookRepository;
+import com.locadora.springboot.books.validations.BookValidation;
 import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.publishers.models.PublisherModel;
 import com.locadora.springboot.publishers.repositories.PublisherRepository;
@@ -25,8 +26,13 @@ public class BookServices {
     @Autowired
     PublisherRepository publisherRepository;
 
+    @Autowired
+    BookValidation bookValidation;
+
     public ResponseEntity<Void> create(@Valid CreateBookRequestDTO data) {
-        if (bookRepository.findByName(data.name()) != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        bookValidation.validLaunchDate(data);
+        bookValidation.validTotalQuantity(data);
 
         PublisherModel publisher = publisherRepository.findById(data.publisherId())
                 .orElseThrow(() -> new IllegalArgumentException("Publisher not found"));
@@ -50,6 +56,9 @@ public class BookServices {
     public ResponseEntity<Object> update(int id, @Valid UpdateBookRecordDTO updateBookRecordDTO){
         Optional<BookModel> response = bookRepository.findById(id);
         if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+
+        bookValidation.validTotalQuantityUpdate(updateBookRecordDTO);
+        bookValidation.validLaunchDateUpdate(updateBookRecordDTO);
 
         PublisherModel publisher = publisherRepository.findById(updateBookRecordDTO.publisherId())
                 .orElseThrow(() -> new IllegalArgumentException("Publisher not found"));

@@ -51,6 +51,11 @@ public class RentServices {
         RentModel newRent = new RentModel(renter, book, data.deadLine());
         rentRepository.save(newRent);
 
+        rentValidation.validateBookTotalQuantity(book);
+
+        book.setTotalQuantity(book.getTotalQuantity() - 1);
+        bookRepository.save(book);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

@@ -22,7 +22,7 @@ public class RenterValidation {
     }
 
     public void validateUpdateEmail(UpdateRenterRequestDTO data){
-        if (renterRepository.findByEmail(data.email()) != null);{
+        if (renterRepository.findByEmail(data.email()) != null){
             throw new CustomValidationException("Email alredy in use.");
         }
     }
