@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @AllArgsConstructor
 @Component
 public class PublisherValidation {
@@ -56,8 +58,10 @@ public class PublisherValidation {
     }
 
     public void validSite(CreatePublisherRequestDTO data){
-        if (publisherRepository.findBySite(data.site()) != null){
-            throw new CustomValidationException("This site is already in use");
+        if (!Objects.equals(data.site(), "")){
+            if (publisherRepository.findBySite(data.site()) != null){
+                throw new CustomValidationException("This site is already in use");
+            }
         }
     }
 
