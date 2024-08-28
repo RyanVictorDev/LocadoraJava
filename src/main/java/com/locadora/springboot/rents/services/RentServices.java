@@ -6,6 +6,7 @@ import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.renters.models.RenterModel;
 import com.locadora.springboot.renters.repositories.RenterRepository;
 import com.locadora.springboot.rents.DTOs.CreateRentRequestDTO;
+import com.locadora.springboot.rents.DTOs.UpdateRentRecordDTO;
 import com.locadora.springboot.rents.models.RentModel;
 import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;
@@ -36,7 +37,7 @@ public class RentServices {
     RentValidation rentValidation;
 
     public ResponseEntity<Void> create(@Valid CreateRentRequestDTO data){
-        rentValidation.validateRentId(data);
+        rentValidation.validateRenterId(data);
 
         RenterModel renter = renterRepository.findById(data.renterId())
                 .orElseThrow(() -> new IllegalArgumentException("Renter not found"));
@@ -69,7 +70,7 @@ public class RentServices {
         return rentRepository.findById(id);
     }
 
-    public ResponseEntity<Object> update(int id) {
+    public ResponseEntity<Object> delivered(int id) {
         Optional<RentModel> optionalRent = rentRepository.findById(id);
         if (optionalRent.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rent not found");
@@ -89,5 +90,31 @@ public class RentServices {
 
         rentRepository.save(rent);
         return ResponseEntity.status(HttpStatus.OK).body(rent);
+    }
+
+    public ResponseEntity<Object> update(int id, @Valid UpdateRentRecordDTO updateRentRecordDTO) {
+        Optional<RentModel> rentOptional = rentRepository.findById(id);
+        if (rentOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rent not found");
+        }
+
+        rentValidation.validateRenterIdUpdate(updateRentRecordDTO);
+        RenterModel renter = renterRepository.findById(updateRentRecordDTO.renterId())
+                .orElseThrow(() -> new IllegalArgumentException("Renter not found"));
+
+        rentValidation.validateBookIdUpdate(updateRentRecordDTO);
+        BookModel book = bookRepository.findById(updateRentRecordDTO.bookId())
+                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+
+        rentValidation.validateDeadLineUpdate(updateRentRecordDTO);
+        rentValidation.validateBookTotalQuantity(book);
+
+        RentModel rentModel = rentOptional.get();
+        rentModel.setBook(book);
+        rentModel.setRenter(renter);
+
+        rentRepository.save(rentModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Rent updated successfully");
     }
 }

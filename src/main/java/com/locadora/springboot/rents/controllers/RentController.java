@@ -2,6 +2,7 @@ package com.locadora.springboot.rents.controllers;
 
 import com.locadora.springboot.rents.DTOs.CreateRentRequestDTO;
 import com.locadora.springboot.rents.DTOs.RentResponseDTO;
+import com.locadora.springboot.rents.DTOs.UpdateRentRecordDTO;
 import com.locadora.springboot.rents.mappers.RentMapper;
 import com.locadora.springboot.rents.services.RentServices;
 import jakarta.validation.Valid;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -41,6 +41,12 @@ public class RentController {
     @PutMapping("/rent/{id}")
     public ResponseEntity<Object> update(
             @PathVariable int id) {
-        return rentServices.update(id);
+        return rentServices.delivered(id);
+    }
+
+    @PutMapping("/rent/update/{id}")
+    public ResponseEntity<Object> update(
+            @PathVariable int id, @RequestBody @Valid UpdateRentRecordDTO data) {
+        return rentServices.update(id,data);
     }
 }
