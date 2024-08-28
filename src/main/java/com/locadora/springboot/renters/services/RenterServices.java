@@ -60,12 +60,16 @@ public class RenterServices {
 
     public ResponseEntity<Object> delete(int id){
         Optional<RenterModel> response = renterRepository.findById(id);
-        if (response.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Renter not found");
+        if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Renter not found");
 
         renterValidation.validateDeleteRenter(id);
 
-        renterRepository.delete(response.get());
+        RenterModel renter = response.get();
+
+        renter.setDeleted(true);
+
+        renterRepository.save(renter);
+
         return ResponseEntity.status(HttpStatus.OK).body("Renter deleted successfully");
     }
 }

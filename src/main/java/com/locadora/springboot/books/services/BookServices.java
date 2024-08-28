@@ -80,7 +80,12 @@ public class BookServices {
 
         bookValidation.validDeleteBook(id);
 
-        bookRepository.delete(response.get());
+        BookModel book = response.get();
+
+        book.setDeleted(true);
+
+        bookRepository.save(book);
+
         return ResponseEntity.status(HttpStatus.OK).body("Book deleted successfully");
     }
 }

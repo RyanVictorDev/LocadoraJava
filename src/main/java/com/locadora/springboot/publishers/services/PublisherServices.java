@@ -73,6 +73,8 @@ public class PublisherServices {
 
         publisher.setDeleted(true);
 
-        return ResponseEntity.status(HttpStatus.OK).body(publisherRepository.save(publisher));
+        publisherRepository.save(publisher);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Publisher deleted successfully");
     }
 }
