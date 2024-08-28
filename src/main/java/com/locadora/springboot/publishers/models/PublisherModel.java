@@ -20,11 +20,13 @@ public class PublisherModel {
     private String email;
     private int telephone;
     private String site;
+    private boolean isDeleted;
 
     public PublisherModel(String name, String email, int telephone, String site){
         this.name = name;
         this.email = email;
         this.telephone = telephone;
         this.site = site;
+        this.isDeleted = false;
     }
 }

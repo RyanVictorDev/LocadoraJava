@@ -36,7 +36,7 @@ public class RenterServices {
     }
 
     public List<RenterModel> findAll() {
-        List<RenterModel> renters = renterRepository.findAll();
+        List<RenterModel> renters = renterRepository.findAllByIsDeletedFalse();
         if (renters.isEmpty())
             throw new ModelNotFoundException();
         return renters;
@@ -62,6 +62,8 @@ public class RenterServices {
         Optional<RenterModel> response = renterRepository.findById(id);
         if (response.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Renter not found");
+
+        renterValidation.validateDeleteRenter(id);
 
         renterRepository.delete(response.get());
         return ResponseEntity.status(HttpStatus.OK).body("Renter deleted successfully");

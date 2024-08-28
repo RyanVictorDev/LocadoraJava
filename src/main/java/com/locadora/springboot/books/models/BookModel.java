@@ -21,6 +21,7 @@ public class BookModel {
     private String author;
     private LocalDate launchDate;
     private int totalQuantity;
+    private boolean isDeleted;
 
     @ManyToOne
     @JoinColumn(name = "publisher_id")
@@ -32,5 +33,6 @@ public class BookModel {
         this.launchDate = launchDate;
         this.totalQuantity = totalQuantity;
         this.publisher = publisher;
+        this.isDeleted = false;
     }
 }

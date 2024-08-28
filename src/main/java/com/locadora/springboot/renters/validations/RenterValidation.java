@@ -1,9 +1,12 @@
 package com.locadora.springboot.renters.validations;
 
+import com.locadora.springboot.books.repositories.BookRepository;
 import com.locadora.springboot.exceptions.CustomValidationException;
 import com.locadora.springboot.renters.DTOs.CreateRenterRequestDTO;
 import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
 import com.locadora.springboot.renters.repositories.RenterRepository;
+import com.locadora.springboot.rents.models.RentStatusEnum;
+import com.locadora.springboot.rents.repositories.RentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +17,9 @@ public class RenterValidation {
 
     @Autowired
     private RenterRepository renterRepository;
+
+    @Autowired
+    private RentRepository rentRepository;
 
     public void validateEmail(CreateRenterRequestDTO data){
         if (renterRepository.findByEmail(data.email()) != null){
@@ -31,5 +37,11 @@ public class RenterValidation {
         if (renterRepository.findByCpf(data.cpf()) != null){
             throw new CustomValidationException("CPF alredy in use.");
         }
+    }
+
+    public void validateDeleteRenter(int id){
+            if (rentRepository.existsByRenterIdAndStatus(id, RentStatusEnum.RENTED)) {
+                throw new CustomValidationException("Cannot delete renter. There are books currently rented out.");
+            }
     }
 }

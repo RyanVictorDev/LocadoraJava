@@ -39,7 +39,7 @@ public class PublisherServices {
     }
 
     public List<PublisherModel> findAll() {
-        List<PublisherModel> publishers = publisherRepository.findAll();
+        List<PublisherModel> publishers = publisherRepository.findAllByIsDeletedFalse();
         if (publishers.isEmpty()) throw new ModelNotFoundException();
         return publishers;
     }
@@ -69,7 +69,10 @@ public class PublisherServices {
 
         publisherValidation.validDeletePublisher(id);
 
-        publisherRepository.delete(response.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Publisher deleted succesfully");
+        PublisherModel publisher = response.get();
+
+        publisher.setDeleted(true);
+
+        return ResponseEntity.status(HttpStatus.OK).body(publisherRepository.save(publisher));
     }
 }

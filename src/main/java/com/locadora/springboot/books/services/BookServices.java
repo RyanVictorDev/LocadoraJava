@@ -44,7 +44,7 @@ public class BookServices {
     }
 
     public List<BookModel> findAll(){
-        List<BookModel> books = bookRepository.findAll();
+        List<BookModel> books = bookRepository.findAllByIsDeletedFalse();
         if(books.isEmpty()) throw new ModelNotFoundException();
         return books;
     }

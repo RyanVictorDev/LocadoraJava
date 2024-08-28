@@ -19,6 +19,7 @@ public class RenterModel {
     private String telephone;
     private String address;
     private String cpf;
+    private boolean isDeleted;
 
     public RenterModel(String name, String email, String telephone, String address, String cpf){
         this.name = name;
@@ -26,5 +27,6 @@ public class RenterModel {
         this.telephone = telephone;
         this.address = address;
         this.cpf = cpf;
+        this.isDeleted = false;
     }
 }
