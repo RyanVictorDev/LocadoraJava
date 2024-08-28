@@ -26,4 +26,10 @@ public class RenterValidation {
             throw new CustomValidationException("Email alredy in use.");
         }
     }
+
+    public void validateCPF(CreateRenterRequestDTO data){
+        if (renterRepository.findByCpf(data.cpf()) != null){
+            throw new CustomValidationException("CPF alredy in use.");
+        }
+    }
 }

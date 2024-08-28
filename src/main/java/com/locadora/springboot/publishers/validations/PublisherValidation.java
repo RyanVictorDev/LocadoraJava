@@ -1,9 +1,11 @@
 package com.locadora.springboot.publishers.validations;
 
+import com.locadora.springboot.books.repositories.BookRepository;
 import com.locadora.springboot.exceptions.CustomValidationException;
 import com.locadora.springboot.publishers.DTOs.CreatePublisherRequestDTO;
 import com.locadora.springboot.publishers.DTOs.UpdatePublisherRecordDTO;
 import com.locadora.springboot.publishers.repositories.PublisherRepository;
+import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class PublisherValidation {
 
     @Autowired
     private RentRepository rentRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     public void validName(CreatePublisherRequestDTO data){
         if (publisherRepository.findByName(data.name())!= null){
@@ -70,9 +75,14 @@ public class PublisherValidation {
             throw new CustomValidationException("This site is already in use");
         }
     }
-//
-//    public void validRentsPublisher(int id){
-//        rentRepository.
-//    }
+
+    public void validDeletePublisher(int id) {
+        var books = bookRepository.findByPublisherId(id);
+        for (var book : books) {
+            if (rentRepository.existsByBookIdAndStatus(book.getId(), RentStatusEnum.RENTED)) {
+                throw new CustomValidationException("Cannot delete publisher. There are books currently rented out.");
+            }
+        }
+    }
 
 }

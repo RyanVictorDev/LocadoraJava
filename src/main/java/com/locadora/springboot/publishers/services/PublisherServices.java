@@ -67,6 +67,8 @@ public class PublisherServices {
         Optional<PublisherModel> response = publisherRepository.findById(id);
         if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Publisher not found");
 
+        publisherValidation.validDeletePublisher(id);
+
         publisherRepository.delete(response.get());
         return ResponseEntity.status(HttpStatus.OK).body("Publisher deleted succesfully");
     }

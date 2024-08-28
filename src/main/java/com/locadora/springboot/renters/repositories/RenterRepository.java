@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface RenterRepository extends JpaRepository<RenterModel, Integer> {
     UserDetails findByName(String name);
     RenterModel findByEmail(String email);
+    RenterModel findByCpf(String cpf);
 }

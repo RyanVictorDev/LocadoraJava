@@ -27,6 +27,7 @@ public class RenterServices {
 
     public ResponseEntity<Void> create(@Valid CreateRenterRequestDTO data){
         renterValidation.validateEmail(data);
+        renterValidation.validateCPF(data);
 
         RenterModel newRenter = new RenterModel(data.name(), data.email(), data.telephone(), data.address(), data.cpf());
         renterRepository.save(newRenter);
