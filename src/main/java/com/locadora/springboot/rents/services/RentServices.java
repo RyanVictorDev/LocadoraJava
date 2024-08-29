@@ -38,6 +38,8 @@ public class RentServices {
 
     public ResponseEntity<Void> create(@Valid CreateRentRequestDTO data){
         rentValidation.validateRenterId(data);
+        rentValidation.validateRentRepeated(data);
+        rentValidation.validateRentLate(data);
 
         RenterModel renter = renterRepository.findById(data.renterId())
                 .orElseThrow(() -> new IllegalArgumentException("Renter not found"));
@@ -47,7 +49,7 @@ public class RentServices {
         BookModel book = bookRepository.findById(data.bookId())
                 .orElseThrow(() -> new IllegalArgumentException("Book not found"));
 
-        rentValidation.validateDeadLine(data);
+//        rentValidation.validateDeadLine(data);
 
         RentModel newRent = new RentModel(renter, book, data.deadLine());
         rentRepository.save(newRent);
