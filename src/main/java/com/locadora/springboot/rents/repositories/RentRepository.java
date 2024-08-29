@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RentRepository extends JpaRepository<RentModel, Integer> {
     boolean existsByBookIdAndStatus(int bookId, RentStatusEnum status);
     boolean existsByRenterIdAndStatus(int renterId, RentStatusEnum status);
-    boolean existsByRenterId(int renterId);
+    boolean existsByRenterIdAndBookIdAndStatus(int renterId, int bookId, RentStatusEnum status);
 }

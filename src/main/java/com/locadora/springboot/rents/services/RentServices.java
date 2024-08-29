@@ -49,9 +49,10 @@ public class RentServices {
         BookModel book = bookRepository.findById(data.bookId())
                 .orElseThrow(() -> new IllegalArgumentException("Book not found"));
 
-//        rentValidation.validateDeadLine(data);
+        rentValidation.validateDeadLine(data);
 
         RentModel newRent = new RentModel(renter, book, data.deadLine());
+        newRent.setStatus(RentStatusEnum.RENTED);
         rentRepository.save(newRent);
 
         rentValidation.validateBookTotalQuantity(book);
@@ -62,9 +63,26 @@ public class RentServices {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public List<RentModel> findAll(){
+    public List<RentModel> findAll() {
         List<RentModel> rents = rentRepository.findAll();
         if (rents.isEmpty()) throw new ModelNotFoundException();
+
+        for (RentModel rent : rents) {
+            if (rent.getDeadLine().isBefore(LocalDate.now())) {
+                rent.setStatus(RentStatusEnum.LATE);
+                rentRepository.save(rent);
+            } else if (rent.getDevolutionDate() == null) {
+                rent.setStatus(RentStatusEnum.RENTED);
+                rentRepository.save(rent);
+            } else if (rent.getDevolutionDate().isAfter(rent.getDeadLine())) {
+                rent.setStatus(RentStatusEnum.DELIVERED_WITH_DELAY);
+                rentRepository.save(rent);
+            } else {
+                rent.setStatus(RentStatusEnum.IN_TIME);
+                rentRepository.save(rent);
+            }
+        }
+
         return rents;
     }
 

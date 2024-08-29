@@ -74,7 +74,7 @@ public class RentValidation {
     }
 
     public void validateRentRepeated(CreateRentRequestDTO data){
-        if (rentRepository.existsByRenterId(data.renterId())){
+        if (rentRepository.existsByRenterIdAndBookIdAndStatus(data.renterId(), data.bookId(), RentStatusEnum.RENTED)){
             throw new CustomValidationException("Renter already has this book rented.");
         }
     }
