@@ -3,7 +3,9 @@ package com.locadora.springboot.users.services;
 import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.users.DTOs.CreateUserRequestDTO;
 import com.locadora.springboot.users.DTOs.UpdateUserRequestDTO;
+import com.locadora.springboot.users.models.PasswordResetTokenModel;
 import com.locadora.springboot.users.models.UserModel;
+import com.locadora.springboot.users.repositories.PasswordResetTokenRepository;
 import com.locadora.springboot.users.repositories.UserRepository;
 import com.locadora.springboot.users.validations.UserValidation;
 import jakarta.validation.Valid;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServices {
@@ -28,6 +31,9 @@ public class UserServices {
 
     @Autowired
     private UserValidation userValidation;
+
+    @Autowired
+    private PasswordResetTokenRepository resetTokenRepository;
 
     public ResponseEntity<Void> create(@Valid CreateUserRequestDTO data) {
 
@@ -71,5 +77,49 @@ public class UserServices {
         }
         userRepository.delete(response.get());
         return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
+    }
+
+    public String createPasswordResetToken(String email) {
+        Optional<UserModel> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
+        if (!userOptional.isPresent()) {
+            return null;
+        }
+
+        UserModel user = userOptional.get();
+
+        PasswordResetTokenModel existingToken = resetTokenRepository.findByUser(user);
+        if (existingToken != null) {
+            if (!existingToken.isExpired()) {
+                return existingToken.getToken();
+            }
+            resetTokenRepository.delete(existingToken);
+        }
+
+        String token = UUID.randomUUID().toString();
+        PasswordResetTokenModel newToken = new PasswordResetTokenModel(token, user);
+        resetTokenRepository.save(newToken);
+
+        return token;
+    }
+
+
+    public boolean validatePasswordResetToken(String token) {
+        PasswordResetTokenModel resetToken = resetTokenRepository.findByToken(token);
+        return resetToken != null && !resetToken.isExpired();
+    }
+
+    public boolean resetPassword(String token, String newPassword) {
+        PasswordResetTokenModel resetToken = resetTokenRepository.findByToken(token);
+        if (resetToken == null || resetToken.isExpired()) {
+            return false;
+        }
+
+        UserModel user = resetToken.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        resetTokenRepository.delete(resetToken);
+
+        return true;
     }
 }

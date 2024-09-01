@@ -7,6 +7,7 @@ import com.locadora.springboot.renters.models.RenterModel;
 import com.locadora.springboot.renters.repositories.RenterRepository;
 import com.locadora.springboot.rents.DTOs.CreateRentRequestDTO;
 import com.locadora.springboot.rents.DTOs.UpdateRentRecordDTO;
+import com.locadora.springboot.rents.models.RentModel;
 import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;
 import lombok.AllArgsConstructor;
@@ -96,6 +97,29 @@ public class RentValidation {
     public void validateRentLate(CreateRentRequestDTO data){
         if (rentRepository.existsByRenterIdAndStatus(data.renterId(), RentStatusEnum.LATE)){
             throw new CustomValidationException("Renter has late rent.");
+        }
+    }
+
+    public void setRentStatus(RentModel rent){
+        if (rent.getDevolutionDate() == null){
+
+            if (rent.getDeadLine().isBefore(LocalDate.now())) {
+                rent.setStatus(RentStatusEnum.LATE);
+                rentRepository.save(rent);
+            } else if (rent.getDevolutionDate() == null) {
+                rent.setStatus(RentStatusEnum.RENTED);
+                rentRepository.save(rent);
+            }
+
+        } else {
+
+            if (rent.getDevolutionDate().isAfter(rent.getDeadLine())) {
+                rent.setStatus(RentStatusEnum.DELIVERED_WITH_DELAY);
+                rentRepository.save(rent);
+            } else {
+                rent.setStatus(RentStatusEnum.IN_TIME);
+                rentRepository.save(rent);
+            }
         }
     }
 }

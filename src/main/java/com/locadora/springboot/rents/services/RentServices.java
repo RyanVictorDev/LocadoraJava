@@ -41,13 +41,11 @@ public class RentServices {
         rentValidation.validateRentRepeated(data);
         rentValidation.validateRentLate(data);
 
-        RenterModel renter = renterRepository.findById(data.renterId())
-                .orElseThrow(() -> new IllegalArgumentException("Renter not found"));
+        RenterModel renter = renterRepository.findById(data.renterId()).get();
 
         rentValidation.validateBookId(data);
 
-        BookModel book = bookRepository.findById(data.bookId())
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+        BookModel book = bookRepository.findById(data.bookId()).get();
 
         rentValidation.validateDeadLine(data);
 
@@ -67,30 +65,7 @@ public class RentServices {
         List<RentModel> rents = rentRepository.findAll();
         if (rents.isEmpty()) throw new ModelNotFoundException();
 
-        for (RentModel rent : rents) {
-
-            if (rent.getDevolutionDate() == null){
-
-                if (rent.getDeadLine().isBefore(LocalDate.now())) {
-                    rent.setStatus(RentStatusEnum.LATE);
-                    rentRepository.save(rent);
-                } else if (rent.getDevolutionDate() == null) {
-                    rent.setStatus(RentStatusEnum.RENTED);
-                    rentRepository.save(rent);
-                }
-
-            } else {
-
-                if (rent.getDevolutionDate().isAfter(rent.getDeadLine())) {
-                    rent.setStatus(RentStatusEnum.DELIVERED_WITH_DELAY);
-                    rentRepository.save(rent);
-                } else {
-                    rent.setStatus(RentStatusEnum.IN_TIME);
-                    rentRepository.save(rent);
-                }
-
-            }
-        }
+        for (RentModel rent : rents) { rentValidation.setRentStatus(rent); }
 
         return rents;
     }
@@ -101,21 +76,13 @@ public class RentServices {
 
     public ResponseEntity<Object> delivered(int id) {
         Optional<RentModel> optionalRent = rentRepository.findById(id);
-        if (optionalRent.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rent not found");
-        }
+        if (optionalRent.isEmpty()) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rent not found"); }
 
         RentModel rent = optionalRent.get();
 
         rent.setDevolutionDate(LocalDate.now());
 
-        if (rent.getDevolutionDate() != null) {
-            if (rent.getDevolutionDate().isAfter(rent.getDeadLine())) {
-                rent.setStatus(RentStatusEnum.DELIVERED_WITH_DELAY);
-            } else {
-                rent.setStatus(RentStatusEnum.DELIVERED);
-            }
-        }
+        rentValidation.setRentStatus(rent);
 
         rentRepository.save(rent);
         return ResponseEntity.status(HttpStatus.OK).body(rent);
@@ -123,17 +90,13 @@ public class RentServices {
 
     public ResponseEntity<Object> update(int id, @Valid UpdateRentRecordDTO updateRentRecordDTO) {
         Optional<RentModel> rentOptional = rentRepository.findById(id);
-        if (rentOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rent not found");
-        }
+        if (rentOptional.isEmpty()) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rent not found"); }
 
         rentValidation.validateRenterIdUpdate(updateRentRecordDTO);
-        RenterModel renter = renterRepository.findById(updateRentRecordDTO.renterId())
-                .orElseThrow(() -> new IllegalArgumentException("Renter not found"));
+        RenterModel renter = renterRepository.findById(updateRentRecordDTO.renterId()).get();
 
         rentValidation.validateBookIdUpdate(updateRentRecordDTO);
-        BookModel book = bookRepository.findById(updateRentRecordDTO.bookId())
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+        BookModel book = bookRepository.findById(updateRentRecordDTO.bookId()).get();
 
         rentValidation.validateDeadLineUpdate(updateRentRecordDTO);
         rentValidation.validateBookTotalQuantity(book);
