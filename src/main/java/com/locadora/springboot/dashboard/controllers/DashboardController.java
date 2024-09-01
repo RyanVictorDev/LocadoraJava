@@ -34,4 +34,14 @@ public class DashboardController {
     public ResponseEntity<Integer> getRentsDeliveredWithDelay(){
         return ResponseEntity.status(HttpStatus.OK).body(dashboardServices.getDeliveredWithDelay());
     }
+
+    @GetMapping("/rentsPerRenter")
+    public ResponseEntity<Object> getRentsPerRenter(){
+        return ResponseEntity.status(HttpStatus.OK).body(dashboardServices.getRentsPerRenter());
+    }
+
+    @GetMapping("/bookMoreRented")
+    public ResponseEntity<Object> getBooksMoreRented(){
+        return ResponseEntity.status(HttpStatus.OK).body(dashboardServices.getBooksMoreRented());
+    }
 }
