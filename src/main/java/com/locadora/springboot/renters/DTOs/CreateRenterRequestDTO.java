@@ -9,5 +9,5 @@ public record CreateRenterRequestDTO(
         @NotBlank(message = "The email cannot be empty") @Email(message = "Invalid email.") String email,
         @NotBlank(message = "The telephone cannot be empty") String telephone,
         @NotBlank(message = "The address cannot be empty") String address,
-        @CPF String cpf) {
+        String cpf) {
 }

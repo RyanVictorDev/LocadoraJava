@@ -8,6 +8,7 @@ import com.locadora.springboot.renters.repositories.RenterRepository;
 import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;
 import lombok.AllArgsConstructor;
+import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,8 +35,17 @@ public class RenterValidation {
     }
 
     public void validateCPF(CreateRenterRequestDTO data){
-        if (renterRepository.findByCpf(data.cpf()) != null){
-            throw new CustomValidationException("CPF alredy in use.");
+        if (data.cpf() != null && !data.cpf().isBlank()) {
+            CPFValidator cpfValidator = new CPFValidator();
+            cpfValidator.initialize(null);
+
+            if (!cpfValidator.isValid(data.cpf(), null)) {
+                throw new CustomValidationException("Invalid CPF format.");
+            }
+
+            if (renterRepository.findByCpf(data.cpf()) != null) {
+                throw new CustomValidationException("CPF alredy in use.");
+            }
         }
     }
 
