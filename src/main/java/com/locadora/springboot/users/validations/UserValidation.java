@@ -13,6 +13,18 @@ public class UserValidation {
 
     private final UserRepository userRepository;
 
+    public void validateName(CreateUserRequestDTO data){
+        if (userRepository.findByName(data.name()) != null){
+            throw new CustomValidationException("User name already in use");
+        }
+    }
+
+    public void validateNameUpdate(UpdateUserRequestDTO data){
+        if (userRepository.findByName(data.name()) != null){
+            throw new CustomValidationException("User name already in use");
+        }
+    }
+
     public void validateEmail(CreateUserRequestDTO data) {
         if (userRepository.findByEmail(data.email()) != null) {
             throw new CustomValidationException("Email already in use.");

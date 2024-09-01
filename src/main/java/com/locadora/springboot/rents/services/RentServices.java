@@ -68,18 +68,27 @@ public class RentServices {
         if (rents.isEmpty()) throw new ModelNotFoundException();
 
         for (RentModel rent : rents) {
-            if (rent.getDeadLine().isBefore(LocalDate.now())) {
-                rent.setStatus(RentStatusEnum.LATE);
-                rentRepository.save(rent);
-            } else if (rent.getDevolutionDate() == null) {
-                rent.setStatus(RentStatusEnum.RENTED);
-                rentRepository.save(rent);
-            } else if (rent.getDevolutionDate().isAfter(rent.getDeadLine())) {
-                rent.setStatus(RentStatusEnum.DELIVERED_WITH_DELAY);
-                rentRepository.save(rent);
+
+            if (rent.getDevolutionDate() == null){
+
+                if (rent.getDeadLine().isBefore(LocalDate.now())) {
+                    rent.setStatus(RentStatusEnum.LATE);
+                    rentRepository.save(rent);
+                } else if (rent.getDevolutionDate() == null) {
+                    rent.setStatus(RentStatusEnum.RENTED);
+                    rentRepository.save(rent);
+                }
+
             } else {
-                rent.setStatus(RentStatusEnum.IN_TIME);
-                rentRepository.save(rent);
+
+                if (rent.getDevolutionDate().isAfter(rent.getDeadLine())) {
+                    rent.setStatus(RentStatusEnum.DELIVERED_WITH_DELAY);
+                    rentRepository.save(rent);
+                } else {
+                    rent.setStatus(RentStatusEnum.IN_TIME);
+                    rentRepository.save(rent);
+                }
+
             }
         }
 

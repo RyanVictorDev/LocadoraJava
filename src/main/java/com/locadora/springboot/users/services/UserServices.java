@@ -31,6 +31,7 @@ public class UserServices {
 
     public ResponseEntity<Void> create(@Valid CreateUserRequestDTO data) {
 
+        userValidation.validateName(data);
         userValidation.validateEmail(data);
 
         String encryptedPassword = passwordEncoder.encode(data.password());
@@ -57,6 +58,7 @@ public class UserServices {
         }
         var userModel = response.get();
 
+        userValidation.validateNameUpdate(updateUserRequestDTO);
         userValidation.validateUpdateEmail(updateUserRequestDTO);
         BeanUtils.copyProperties(updateUserRequestDTO, userModel);
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(userModel));

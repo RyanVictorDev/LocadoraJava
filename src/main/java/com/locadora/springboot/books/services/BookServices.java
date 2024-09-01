@@ -36,6 +36,7 @@ public class BookServices {
 
         PublisherModel publisher = publisherRepository.findById(data.publisherId())
                 .orElseThrow(() -> new IllegalArgumentException("Publisher not found"));
+        bookValidation.validPublisherExist(data);
 
         BookModel newBook = new BookModel(data.name(), data.author(), data.launchDate(), data.totalQuantity(), publisher);
         bookRepository.save(newBook);
