@@ -102,7 +102,6 @@ public class UserServices {
         return token;
     }
 
-
     public boolean validatePasswordResetToken(String token) {
         PasswordResetTokenModel resetToken = resetTokenRepository.findByToken(token);
         return resetToken != null && !resetToken.isExpired();

@@ -14,4 +14,5 @@ public interface RenterRepository extends JpaRepository<RenterModel, Integer> {
     RenterModel findByEmail(String email);
     RenterModel findByCpf(String cpf);
     List<RenterModel> findAllByIsDeletedFalse();
+    List<RenterModel> findAllByEmail(String email);
 }

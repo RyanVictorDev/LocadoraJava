@@ -50,7 +50,8 @@ public class RenterServices {
         Optional<RenterModel> response = renterRepository.findById(id);
         if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Renter not found");
 
-        renterValidation.validateUpdateEmail(updateRenterRequestDTO);
+        renterValidation.validateUpdateEmail(updateRenterRequestDTO, id);
+        renterValidation.validateCPFUpdate(updateRenterRequestDTO);
 
         RenterModel renterModel = response.get();
         BeanUtils.copyProperties(updateRenterRequestDTO, renterModel);

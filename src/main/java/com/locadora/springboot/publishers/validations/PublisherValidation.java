@@ -71,8 +71,10 @@ public class PublisherValidation {
     }
 
     public void validSiteUpdate(UpdatePublisherRecordDTO data){
-        if (publisherRepository.findBySite(data.site()) != null){
-            throw new CustomValidationException("This site is already in use");
+        if (!Objects.equals(data.site(), "")) {
+            if (publisherRepository.findBySite(data.site()) != null) {
+                throw new CustomValidationException("This site is already in use");
+            }
         }
     }
 

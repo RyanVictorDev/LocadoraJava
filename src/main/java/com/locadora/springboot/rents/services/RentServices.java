@@ -82,6 +82,7 @@ public class RentServices {
 
         rent.setDevolutionDate(LocalDate.now());
 
+        rentValidation.deliveredValidate(id);
         rentValidation.setRentStatus(rent);
 
         rentRepository.save(rent);

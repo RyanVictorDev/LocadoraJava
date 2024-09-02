@@ -100,6 +100,13 @@ public class RentValidation {
         }
     }
 
+    public void deliveredValidate(int id){
+        RentModel rent = rentRepository.findById(id).get();
+        if (rent.getStatus() == RentStatusEnum.DELIVERED || rent.getStatus() == RentStatusEnum.DELIVERED_WITH_DELAY || rent.getStatus() == RentStatusEnum.IN_TIME){
+            throw new CustomValidationException("Rent is already refunded");
+        }
+    }
+
     public void setRentStatus(RentModel rent){
         if (rent.getDevolutionDate() == null){
 
