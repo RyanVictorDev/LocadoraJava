@@ -33,6 +33,7 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/reset-password").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/forgot").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/publisher").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/renter").hasRole("ADMIN")

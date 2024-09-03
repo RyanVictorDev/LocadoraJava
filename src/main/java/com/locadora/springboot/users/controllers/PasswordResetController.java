@@ -1,5 +1,6 @@
 package com.locadora.springboot.users.controllers;
 
+import com.locadora.springboot.users.DTOs.TokenValidationRequest;
 import com.locadora.springboot.users.models.EmailRequestModel;
 import com.locadora.springboot.users.models.PasswordResetRequestModel;
 import com.locadora.springboot.users.services.UserServices;
@@ -7,11 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 public class PasswordResetController {
 
     @Autowired
@@ -23,7 +27,6 @@ public class PasswordResetController {
     @PostMapping("/forgot")
     public ResponseEntity<String> processForgotPassword(@RequestBody EmailRequestModel emailRequestDTO) {
         String email = emailRequestDTO.getEmail();
-        System.out.println("Recebido e-mail: " + email);
 
         String token = userServices.createPasswordResetToken(email);
         if (token == null) {
@@ -31,12 +34,12 @@ public class PasswordResetController {
             return ResponseEntity.badRequest().body("Usuário não encontrado.");
         }
 
-        String resetLink = "http://localhost:8040/api/reset-password?token=" + token;
+        String resetLink = "Digite este token para confirmar sua redefinição de senha: " + token;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject("Redefinição de senha");
-        message.setText("Clique no link para redefinir sua senha: " + resetLink);
+        message.setText(resetLink);
 
         mailSender.send(message);
 
@@ -56,9 +59,9 @@ public class PasswordResetController {
         }
     }
 
-
-    @GetMapping("/reset-password/validate")
-    public ResponseEntity<String> validateResetToken(@RequestParam("token") String token) {
+    @PostMapping("/reset-password/validate")
+    public ResponseEntity<String> validateResetToken(@RequestBody TokenValidationRequest request) {
+        String token = request.getToken();
         boolean isValid = userServices.validatePasswordResetToken(token);
         if (!isValid) {
             return ResponseEntity.badRequest().body("Token inválido ou expirado.");
