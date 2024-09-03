@@ -9,7 +9,6 @@ import com.locadora.springboot.users.repositories.PasswordResetTokenRepository;
 import com.locadora.springboot.users.repositories.UserRepository;
 import com.locadora.springboot.users.validations.UserValidation;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -47,10 +47,15 @@ public class UserServices {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public List<UserModel> findAll() {
-        List<UserModel> users = userRepository.findAll();
-        if (users.isEmpty()) throw new ModelNotFoundException();
-        return users;
+    public List<UserModel> findAll(String search) {
+        if (Objects.equals(search, "")){
+            List<UserModel> users = userRepository.findAll();
+            if (users.isEmpty()) throw new ModelNotFoundException();
+            return users;
+        } else {
+            List<UserModel> userByName = userRepository.findAllByName(search);
+            return userByName;
+        }
     }
 
     public Optional<UserModel> findById(int id) {
