@@ -54,7 +54,7 @@ public class BookValidation {
     }
 
     public void validTotalQuantityUpdate(UpdateBookRecordDTO data){
-        if (data.totalQuantity() <= 0){
+        if (data.totalQuantity() < 0){
             throw new CustomValidationException("The total quantity cannot be less than 1");
         }
     }

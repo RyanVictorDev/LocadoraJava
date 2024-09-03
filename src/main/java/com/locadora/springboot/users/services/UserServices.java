@@ -64,9 +64,13 @@ public class UserServices {
         }
         var userModel = response.get();
 
-        userValidation.validateNameUpdate(updateUserRequestDTO);
-        userValidation.validateUpdateEmail(updateUserRequestDTO);
-        BeanUtils.copyProperties(updateUserRequestDTO, userModel);
+        userValidation.validateNameUpdate(updateUserRequestDTO, id);
+        userValidation.validateUpdateEmail(updateUserRequestDTO, id);
+
+        userModel.setName(updateUserRequestDTO.name());
+        userModel.setEmail(updateUserRequestDTO.email());
+        userModel.setRole(updateUserRequestDTO.role());
+
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(userModel));
     }
 

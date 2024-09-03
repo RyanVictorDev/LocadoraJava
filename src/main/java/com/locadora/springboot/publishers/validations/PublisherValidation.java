@@ -4,6 +4,7 @@ import com.locadora.springboot.books.repositories.BookRepository;
 import com.locadora.springboot.exceptions.CustomValidationException;
 import com.locadora.springboot.publishers.DTOs.CreatePublisherRequestDTO;
 import com.locadora.springboot.publishers.DTOs.UpdatePublisherRecordDTO;
+import com.locadora.springboot.publishers.models.PublisherModel;
 import com.locadora.springboot.publishers.repositories.PublisherRepository;
 import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;
@@ -32,9 +33,13 @@ public class PublisherValidation {
         }
     }
 
-    public void validNameUpdate(UpdatePublisherRecordDTO data){
-        if (publisherRepository.findByName(data.name())!= null){
-            throw new CustomValidationException("Name alredy in use.");
+    public void validNameUpdate(UpdatePublisherRecordDTO data, int id){
+        PublisherModel publisher = publisherRepository.findById(id).get();
+
+        if (!Objects.equals(publisher.getName(), data.name())){
+            if (publisherRepository.findByName(data.name())!= null){
+                throw new CustomValidationException("Name alredy in use.");
+            }
         }
     }
 
@@ -44,9 +49,13 @@ public class PublisherValidation {
         }
     }
 
-    public void validEmailUpdate(UpdatePublisherRecordDTO data){
-        if (publisherRepository.findByEmail(data.email()) != null){
-            throw new CustomValidationException("Email alredy in use.");
+    public void validEmailUpdate(UpdatePublisherRecordDTO data, int id){
+        PublisherModel publisher = publisherRepository.findById(id).get();
+
+        if (!Objects.equals(publisher.getEmail(), data.email())){
+            if (publisherRepository.findByEmail(data.email()) != null){
+                throw new CustomValidationException("Email alredy in use.");
+            }
         }
     }
 
@@ -56,9 +65,13 @@ public class PublisherValidation {
         }
     }
 
-    public void validTelephoneUpdate(UpdatePublisherRecordDTO data){
-        if (publisherRepository.findByTelephone(data.telephone())!= null){
-            throw new CustomValidationException("This telephone is alredy in use.");
+    public void validTelephoneUpdate(UpdatePublisherRecordDTO data, int id){
+        PublisherModel publisher = publisherRepository.findById(id).get();
+
+        if (!Objects.equals(publisher.getTelephone(), data.telephone())){
+            if (publisherRepository.findByTelephone(data.telephone())!= null){
+                throw new CustomValidationException("This telephone is alredy in use.");
+            }
         }
     }
 
@@ -70,10 +83,14 @@ public class PublisherValidation {
         }
     }
 
-    public void validSiteUpdate(UpdatePublisherRecordDTO data){
+    public void validSiteUpdate(UpdatePublisherRecordDTO data, int id){
+        PublisherModel publisher = publisherRepository.findById(id).get();
+
         if (!Objects.equals(data.site(), "")) {
-            if (publisherRepository.findBySite(data.site()) != null) {
-                throw new CustomValidationException("This site is already in use");
+            if (!Objects.equals(publisher.getSite(), data.site())){
+                if (publisherRepository.findBySite(data.site()) != null) {
+                    throw new CustomValidationException("This site is already in use");
+                }
             }
         }
     }

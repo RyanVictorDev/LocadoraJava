@@ -8,6 +8,5 @@ import jakarta.validation.constraints.NotNull;
 public record UpdateUserRequestDTO(
         @NotBlank(message = "The name cannot be empty ") String name,
         @NotBlank(message = "Email cannot be null") @Email(message = "Invalid email") String email,
-        @NotBlank(message = "Password cannot be empty") String password,
         @NotNull UserRoleEnum role) {
 }

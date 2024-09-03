@@ -52,10 +52,10 @@ public class PublisherServices {
         Optional<PublisherModel> response = publisherRepository.findById(id);
         if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Publisher not found");
 
-        publisherValidation.validNameUpdate(updatePublisherRecordDTO);
-        publisherValidation.validEmailUpdate(updatePublisherRecordDTO);
-        publisherValidation.validTelephoneUpdate(updatePublisherRecordDTO);
-        publisherValidation.validSiteUpdate(updatePublisherRecordDTO);
+        publisherValidation.validNameUpdate(updatePublisherRecordDTO, id);
+        publisherValidation.validEmailUpdate(updatePublisherRecordDTO, id);
+        publisherValidation.validTelephoneUpdate(updatePublisherRecordDTO, id);
+        publisherValidation.validSiteUpdate(updatePublisherRecordDTO, id);
 
         var publisherModel = response.get();
         BeanUtils.copyProperties(updatePublisherRecordDTO, publisherModel);

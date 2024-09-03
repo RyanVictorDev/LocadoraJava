@@ -57,17 +57,21 @@ public class RenterValidation {
         }
     }
 
-    public void validateCPFUpdate(UpdateRenterRequestDTO data){
+    public void validateCPFUpdate(UpdateRenterRequestDTO data, int id){
+        RenterModel renter = renterRepository.findById(id).get();
+
         if (data.cpf() != null && !data.cpf().isBlank()) {
-            CPFValidator cpfValidator = new CPFValidator();
-            cpfValidator.initialize(null);
+            if (!Objects.equals(renter.getCpf(), data.cpf())){
+                CPFValidator cpfValidator = new CPFValidator();
+                cpfValidator.initialize(null);
 
-            if (!cpfValidator.isValid(data.cpf(), null)) {
-                throw new CustomValidationException("Invalid CPF format.");
-            }
+                if (!cpfValidator.isValid(data.cpf(), null)) {
+                    throw new CustomValidationException("Invalid CPF format.");
+                }
 
-            if (renterRepository.findByCpf(data.cpf()) != null) {
-                throw new CustomValidationException("CPF alredy in use.");
+                if (renterRepository.findByCpf(data.cpf()) != null) {
+                    throw new CustomValidationException("CPF alredy in use.");
+                }
             }
         }
     }
