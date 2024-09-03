@@ -29,8 +29,8 @@ public class PublisherController {
     }
 
     @GetMapping("/publisher")
-    public ResponseEntity<List<PublisherResponseDTO>> getAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(publisherMapper.toPublisherResponseList(publisherServices.findAll()));
+    public ResponseEntity<List<PublisherResponseDTO>> getAll(String search){
+        return ResponseEntity.status(HttpStatus.OK).body(publisherMapper.toPublisherResponseList(publisherServices.findAll(search)));
     }
 
     @GetMapping("/publisher/{id}")

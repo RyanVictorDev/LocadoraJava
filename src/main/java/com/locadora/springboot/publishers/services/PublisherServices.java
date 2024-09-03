@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -38,10 +39,15 @@ public class PublisherServices {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public List<PublisherModel> findAll() {
-        List<PublisherModel> publishers = publisherRepository.findAllByIsDeletedFalse();
-        if (publishers.isEmpty()) throw new ModelNotFoundException();
-        return publishers;
+    public List<PublisherModel> findAll(String search) {
+        if (Objects.equals(search, "")){
+            List<PublisherModel> publishers = publisherRepository.findAllByIsDeletedFalse();
+            if (publishers.isEmpty()) throw new ModelNotFoundException();
+            return publishers;
+        } else {
+            List<PublisherModel> publisherSearch = publisherRepository.findAllByName(search);
+            return publisherSearch;
+        }
     }
 
     public Optional<PublisherModel> findById(int id){

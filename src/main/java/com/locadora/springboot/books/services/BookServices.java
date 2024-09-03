@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -44,10 +45,15 @@ public class BookServices {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public List<BookModel> findAll(){
-        List<BookModel> books = bookRepository.findAllByIsDeletedFalse();
-        if(books.isEmpty()) throw new ModelNotFoundException();
-        return books;
+    public List<BookModel> findAll(String search){
+        if (Objects.equals(search, "")){
+            List<BookModel> books = bookRepository.findAllByIsDeletedFalse();
+            if(books.isEmpty()) throw new ModelNotFoundException();
+            return books;
+        } else {
+            List<BookModel> bookSearch = bookRepository.findAllByName(search);
+            return bookSearch;
+        }
     }
 
     public Optional<BookModel> findById(int id){

@@ -11,6 +11,7 @@ import com.locadora.springboot.rents.models.RentModel;
 import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;
 import com.locadora.springboot.rents.validation.RentValidation;
+import com.locadora.springboot.users.models.UserModel;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -61,13 +63,18 @@ public class RentServices {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public List<RentModel> findAll() {
-        List<RentModel> rents = rentRepository.findAll();
-        if (rents.isEmpty()) throw new ModelNotFoundException();
+    public List<RentModel> findAll(String search) {
+        if (Objects.equals(search, "")){
+            List<RentModel> rents = rentRepository.findAll();
+            if (rents.isEmpty()) throw new ModelNotFoundException();
 
-        for (RentModel rent : rents) { rentValidation.setRentStatus(rent); }
+            for (RentModel rent : rents) { rentValidation.setRentStatus(rent); }
 
-        return rents;
+            return rents;
+        } else {
+            List<RentModel> rentByName = rentRepository.findAllByRenterNameOrBookName(search);
+            return rentByName;
+        }
     }
 
     public Optional<RentModel> findById(int id){

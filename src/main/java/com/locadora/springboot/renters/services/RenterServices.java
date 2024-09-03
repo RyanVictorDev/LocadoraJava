@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -35,11 +36,16 @@ public class RenterServices {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public List<RenterModel> findAll() {
-        List<RenterModel> renters = renterRepository.findAllByIsDeletedFalse();
-        if (renters.isEmpty())
-            throw new ModelNotFoundException();
-        return renters;
+    public List<RenterModel> findAll(String search) {
+        if (Objects.equals(search, "")){
+            List<RenterModel> renters = renterRepository.findAllByIsDeletedFalse();
+            if (renters.isEmpty())
+                throw new ModelNotFoundException();
+            return renters;
+        } else {
+            List<RenterModel> renterSearch = renterRepository.findAllByName(search);
+            return renterSearch;
+        }
     }
 
     public Optional<RenterModel> findById(int id) {

@@ -29,8 +29,8 @@ public class BookController {
     }
 
     @GetMapping("/book")
-    public ResponseEntity<List<BookResponseDTO>> getAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(bookMapper.toBookResponseList(bookServices.findAll()));
+    public ResponseEntity<List<BookResponseDTO>> getAll(String search){
+        return ResponseEntity.status(HttpStatus.OK).body(bookMapper.toBookResponseList(bookServices.findAll(search)));
     }
 
     @GetMapping("/book/{id}")

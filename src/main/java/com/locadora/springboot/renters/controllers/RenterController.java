@@ -27,8 +27,8 @@ public class RenterController {
     }
 
     @GetMapping("/renter")
-    public ResponseEntity<List<RenterResponseDTO>> getAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(renterMapper.toRenterResponseList(renterServices.findAll()));
+    public ResponseEntity<List<RenterResponseDTO>> getAll(String search){
+        return ResponseEntity.status(HttpStatus.OK).body(renterMapper.toRenterResponseList(renterServices.findAll(search)));
     }
 
     @GetMapping("/renter/{id}")
