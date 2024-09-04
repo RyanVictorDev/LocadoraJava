@@ -13,5 +13,6 @@ public record BookResponseDTO(
         String author,
         @JsonFormat(pattern = "yyyy-MM-dd") LocalDate launchDate,
         int totalQuantity,
+        int totalInUse,
         PublisherModel publisher) {
 }

@@ -8,6 +8,8 @@ import com.locadora.springboot.books.validations.BookValidation;
 import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.publishers.models.PublisherModel;
 import com.locadora.springboot.publishers.repositories.PublisherRepository;
+import com.locadora.springboot.rents.models.RentModel;
+import com.locadora.springboot.rents.repositories.RentRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,9 @@ public class BookServices {
 
     @Autowired
     PublisherRepository publisherRepository;
+
+    @Autowired
+    RentRepository rentRepository;
 
     @Autowired
     BookValidation bookValidation;
@@ -49,6 +54,12 @@ public class BookServices {
         if (Objects.equals(search, "")){
             List<BookModel> books = bookRepository.findAllByIsDeletedFalse();
             if(books.isEmpty()) throw new ModelNotFoundException();
+
+            for (BookModel book : books) {
+                List<RentModel> total = rentRepository.findAllByBookId(book.getId());
+                book.setTotalInUse(total.size());
+            }
+
             return books;
         } else {
             List<BookModel> bookSearch = bookRepository.findAllByName(search);

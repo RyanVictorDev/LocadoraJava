@@ -21,6 +21,7 @@ public class BookModel {
     private String author;
     private LocalDate launchDate;
     private int totalQuantity;
+    private int totalInUse;
     private boolean isDeleted;
 
     @ManyToOne
@@ -33,6 +34,7 @@ public class BookModel {
         this.launchDate = launchDate;
         this.totalQuantity = totalQuantity;
         this.publisher = publisher;
+        this.totalInUse = 0;
         this.isDeleted = false;
     }
 }
