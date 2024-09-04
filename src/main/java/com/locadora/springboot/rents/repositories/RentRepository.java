@@ -16,6 +16,7 @@ public interface RentRepository extends JpaRepository<RentModel, Integer> {
     List<RentModel> findAllByRenterId(int renterId);
     List<RentModel> findAllByRenterIdAndStatus(int renterId, RentStatusEnum status);
     List<RentModel> findAllByBookId(int bookId);
+    List<RentModel> findAllByBookIdAndStatus(int bookId, RentStatusEnum status);
 
     @Query("SELECT u FROM RentModel u " +
             "JOIN u.renter r " +

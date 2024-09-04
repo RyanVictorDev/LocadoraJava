@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Component
@@ -73,14 +74,16 @@ public class RentValidation {
         }
     }
 
-    public void validateDeadLineUpdate(UpdateRentRecordDTO data) {
-        if (data.deadLine().isAfter(LocalDate.now().plusDays(30))) {
-            throw new CustomValidationException("Deadline cannot be more than 30 days from today.");
-        } else if (data.deadLine().isBefore(LocalDate.now())) {
-            throw new CustomValidationException("The deadline cannot be in the past.");
+    public void validateDeadLineUpdate(UpdateRentRecordDTO data, int id) {
+        RentModel rentPass = rentRepository.findById(id).get();
+        if (!Objects.equals(rentPass.getDeadLine(), data.deadLine())){
+            if (data.deadLine().isAfter(LocalDate.now().plusDays(30))) {
+                throw new CustomValidationException("Deadline cannot be more than 30 days from today.");
+            } else if (data.deadLine().isBefore(LocalDate.now())) {
+                throw new CustomValidationException("The deadline cannot be in the past.");
+            }
         }
     }
-
 
     public void validateBookTotalQuantity(BookModel data){
         if (data.getTotalQuantity() <= 0){

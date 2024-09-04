@@ -9,6 +9,7 @@ import com.locadora.springboot.exceptions.ModelNotFoundException;
 import com.locadora.springboot.publishers.models.PublisherModel;
 import com.locadora.springboot.publishers.repositories.PublisherRepository;
 import com.locadora.springboot.rents.models.RentModel;
+import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,9 @@ public class BookServices {
             if(books.isEmpty()) throw new ModelNotFoundException();
 
             for (BookModel book : books) {
-                List<RentModel> total = rentRepository.findAllByBookId(book.getId());
-                book.setTotalInUse(total.size());
+                List<RentModel> totalRented = rentRepository.findAllByBookIdAndStatus(book.getId(), RentStatusEnum.RENTED);
+                List<RentModel> totalLate = rentRepository.findAllByBookIdAndStatus(book.getId(), RentStatusEnum.LATE);
+                book.setTotalInUse(totalRented.size() + totalLate.size());
             }
 
             return books;

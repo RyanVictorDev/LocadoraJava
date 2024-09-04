@@ -106,12 +106,13 @@ public class RentServices {
         rentValidation.validateBookIdUpdate(updateRentRecordDTO);
         BookModel book = bookRepository.findById(updateRentRecordDTO.bookId()).get();
 
-        rentValidation.validateDeadLineUpdate(updateRentRecordDTO);
+        rentValidation.validateDeadLineUpdate(updateRentRecordDTO, id);
         rentValidation.validateBookTotalQuantity(book);
 
         RentModel rentModel = rentOptional.get();
         rentModel.setBook(book);
         rentModel.setRenter(renter);
+        rentModel.setDeadLine(updateRentRecordDTO.deadLine());
 
         rentRepository.save(rentModel);
 

@@ -46,10 +46,4 @@ public class RentModel {
         this.rentDate = LocalDate.now();
         this.status = null;
     }
-
-//    private RentStatusEnum determineStatus(LocalDate deadLine, LocalDate devolutionDate, LocalDate rentDate) {
-//        if (deadLine.isBefore(LocalDate.now())) return RentStatusEnum.LATE;
-//        else if (devolutionDate == null) return RentStatusEnum.RENTED;
-//        else return devolutionDate.isAfter(deadLine) ? RentStatusEnum.DELIVERED_WITH_DELAY : RentStatusEnum.IN_TIME;
-//    }
 }
