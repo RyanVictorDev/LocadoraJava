@@ -7,6 +7,6 @@ public record PublisherResponseDTO(
         int id,
         String name,
         String email,
-        int telephone,
+        String telephone,
         String site) {
 }

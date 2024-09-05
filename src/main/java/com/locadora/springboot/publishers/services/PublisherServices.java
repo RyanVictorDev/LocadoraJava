@@ -10,6 +10,7 @@ import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class PublisherServices {
 
     public List<PublisherModel> findAll(String search) {
         if (Objects.equals(search, "")){
-            List<PublisherModel> publishers = publisherRepository.findAllByIsDeletedFalse();
+            List<PublisherModel> publishers = publisherRepository.findAllByIsDeletedFalse(Sort.by(Sort.Direction.DESC, "id"));
             if (publishers.isEmpty()) throw new ModelNotFoundException();
             return publishers;
         } else {

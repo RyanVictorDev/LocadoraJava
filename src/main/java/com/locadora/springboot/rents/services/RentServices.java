@@ -14,6 +14,7 @@ import com.locadora.springboot.rents.validation.RentValidation;
 import com.locadora.springboot.users.models.UserModel;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -65,7 +66,7 @@ public class RentServices {
 
     public List<RentModel> findAll(String search) {
         if (Objects.equals(search, "")){
-            List<RentModel> rents = rentRepository.findAll();
+            List<RentModel> rents = rentRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
             if (rents.isEmpty()) throw new ModelNotFoundException();
 
             for (RentModel rent : rents) { rentValidation.setRentStatus(rent); }
@@ -114,7 +115,7 @@ public class RentServices {
         rentModel.setRenter(renter);
         rentModel.setDeadLine(updateRentRecordDTO.deadLine());
 
-        rentRepository.save(rentModel);
+        rentRepository.save(rentModel);                                 
 
         return ResponseEntity.status(HttpStatus.OK).body("Rent updated successfully");
     }

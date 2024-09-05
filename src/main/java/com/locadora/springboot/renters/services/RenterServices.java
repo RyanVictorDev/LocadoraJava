@@ -9,6 +9,7 @@ import com.locadora.springboot.renters.validations.RenterValidation;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class RenterServices {
 
     public List<RenterModel> findAll(String search) {
         if (Objects.equals(search, "")){
-            List<RenterModel> renters = renterRepository.findAllByIsDeletedFalse();
+            List<RenterModel> renters = renterRepository.findAllByIsDeletedFalse(Sort.by(Sort.Direction.DESC, "id"));
             if (renters.isEmpty())
                 throw new ModelNotFoundException();
             return renters;

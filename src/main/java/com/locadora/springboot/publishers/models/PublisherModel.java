@@ -18,11 +18,11 @@ public class PublisherModel {
     private int id;
     private String name;
     private String email;
-    private int telephone;
+    private String telephone;
     private String site;
     private boolean isDeleted;
 
-    public PublisherModel(String name, String email, int telephone, String site){
+    public PublisherModel(String name, String email, String telephone, String site){
         this.name = name;
         this.email = email;
         this.telephone = telephone;

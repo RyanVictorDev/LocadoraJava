@@ -13,6 +13,7 @@ import com.locadora.springboot.rents.models.RentStatusEnum;
 import com.locadora.springboot.rents.repositories.RentRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class BookServices {
 
     public List<BookModel> findAll(String search){
         if (Objects.equals(search, "")){
-            List<BookModel> books = bookRepository.findAllByIsDeletedFalse();
+            List<BookModel> books = bookRepository.findAllByIsDeletedFalse(Sort.by(Sort.Direction.DESC, "id"));
             if(books.isEmpty()) throw new ModelNotFoundException();
 
             for (BookModel book : books) {
