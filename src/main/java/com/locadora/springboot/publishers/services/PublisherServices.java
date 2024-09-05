@@ -6,7 +6,6 @@ import com.locadora.springboot.publishers.DTOs.UpdatePublisherRecordDTO;
 import com.locadora.springboot.publishers.models.PublisherModel;
 import com.locadora.springboot.publishers.repositories.PublisherRepository;
 import com.locadora.springboot.publishers.validations.PublisherValidation;
-import com.locadora.springboot.renters.DTOs.UpdateRenterRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

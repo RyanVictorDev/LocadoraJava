@@ -1,6 +1,5 @@
 package com.locadora.springboot.dashboard.services;
 
-import com.locadora.springboot.books.models.BookModel;
 import com.locadora.springboot.books.repositories.BookRepository;
 import com.locadora.springboot.dashboard.DTOs.BooksMoreRented;
 import com.locadora.springboot.dashboard.DTOs.RentsperRenterResponseDTO;
@@ -13,8 +12,8 @@ import com.locadora.springboot.rents.repositories.RentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DashboardServices {
